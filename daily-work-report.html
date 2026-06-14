@@ -682,12 +682,30 @@
       [...event.target.files].forEach(file => {
         const reader = new FileReader();
         reader.onload = e => {
-          photos.push({ data: e.target.result, caption: '' });
-          renderPhotos();
+          resizeImage(e.target.result, resized => {
+            photos.push({ data: resized, caption: '' });
+            renderPhotos();
+          });
         };
         reader.readAsDataURL(file);
       });
       event.target.value = '';
+    }
+
+    function resizeImage(dataUrl, done) {
+      const image = new Image();
+      image.onload = () => {
+        const maxSide = 1400;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        done(canvas.toDataURL('image/jpeg', .82));
+      };
+      image.onerror = () => done(dataUrl);
+      image.src = dataUrl;
     }
 
     function renderPhotos() {
@@ -748,8 +766,14 @@
     }
 
     function saveCurrent() {
-      localStorage.setItem('tz_daily_work_report', JSON.stringify(collect()));
-      toast('انحفظ كآخر تقرير');
+      const data = collect();
+      data.photos = [];
+      try {
+        localStorage.setItem('tz_daily_work_report', JSON.stringify(data));
+        toast('انحفظ كآخر تقرير');
+      } catch (error) {
+        toast('تم تجهيز التقرير بدون حفظ الصور');
+      }
     }
 
     function loadYesterday() {
@@ -788,7 +812,12 @@
 
     function buildPreview(printAfter) {
       const data = collect();
-      saveCurrent();
+      const dataForStorage = { ...data, photos: [] };
+      try {
+        localStorage.setItem('tz_daily_work_report', JSON.stringify(dataForStorage));
+      } catch (error) {
+        console.warn('Report text was not saved locally.', error);
+      }
       const manpowerRows = tableRows(data.manpower, item => item
         ? `<td>${esc(item.role)}</td><td>${esc(item.company)}</td><td class="center">${esc(item.num)}</td>`
         : '<td>&nbsp;</td><td></td><td></td>');
