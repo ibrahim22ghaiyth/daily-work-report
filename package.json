@@ -1,0 +1,12 @@
+{
+  "name": "daily-work-report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daily work report web page",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تقرير العمل اليومي</title>
+  <style>
+    :root {
+      --red: #e73124;
+      --red-dark: #b52118;
+      --blue: #302b86;
+      --navy: #151b2a;
+      --ink: #1f252d;
+      --muted: #68717d;
+      --line: #dfe4ec;
+      --soft: #f3f5f9;
+      --paper: #ffffff;
+      --green: #1f8a58;
+      --shadow: 0 18px 42px rgba(17, 25, 39, .13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(231,49,36,.14), transparent 28rem),
+        radial-gradient(circle at bottom right, rgba(48,43,134,.15), transparent 30rem),
+        #eef2f7;
+      line-height: 1.55;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    img { max-width: 100%; }
+
+    .shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 46px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 210px;
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(21,27,42,.98), rgba(35,48,70,.94)),
+        linear-gradient(45deg, var(--red), var(--blue));
+      color: #fff;
+      padding: 22px;
+      box-shadow: 0 18px 0 #cfd7e4, var(--shadow);
+      isolation: isolate;
+    }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 24px;
+      transform: rotate(-12deg);
+      z-index: -1;
+    }
+    .hero::before {
+      width: 360px;
+      height: 86px;
+      background: rgba(231,49,36,.94);
+      top: 26px;
+      left: -82px;
+      box-shadow: 0 24px 0 rgba(48,43,134,.45);
+    }
+    .hero::after {
+      width: 420px;
+      height: 130px;
+      border: 2px solid rgba(255,255,255,.13);
+      right: -150px;
+      bottom: -32px;
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .brand-logo {
+      width: 96px;
+      height: 66px;
+      object-fit: contain;
+      padding: 7px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 0 rgba(0,0,0,.24), 0 20px 28px rgba(0,0,0,.24);
+      transform: perspective(300px) rotateY(-10deg) rotateX(3deg);
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(27px, 4vw, 46px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .hero p { margin: 6px 0 0; color: #dce3ef; font-size: 14px; }
+    .hero-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 800;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 5px 0 rgba(31,37,45,.16);
+      transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(31,37,45,.14), 0 14px 22px rgba(31,37,45,.12); }
+    .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(31,37,45,.2); }
+    .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn.dark { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .btn.light { border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.1); color: #fff; backdrop-filter: blur(10px); }
+    .btn.full { width: 100%; border-style: dashed; color: var(--blue); }
+
+    .quick-nav {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0 16px;
+    }
+    .quick-nav a {
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 10px;
+      text-align: center;
+      font-weight: 900;
+      box-shadow: 0 9px 0 #dbe1ea;
+    }
+    .quick-nav span {
+      display: block;
+      color: var(--red);
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .stack { display: grid; gap: 16px; min-width: 0; }
+    .panel {
+      position: relative;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, var(--red), var(--blue));
+    }
+    .panel h2 {
+      margin: 0 0 5px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+    .hint { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+
+    .grid { display: grid; gap: 12px; }
+    .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: #4f5966;
+      font-weight: 900;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 12px;
+      outline: none;
+    }
+    textarea { min-height: 76px; resize: vertical; }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(231,49,36,.12);
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .chip {
+      border: 1px solid #ccd3df;
+      background: var(--soft);
+      color: var(--navy);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .chip:hover { border-color: var(--red); color: var(--red); }
+
+    .rows { display: grid; gap: 10px; }
+    .row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 38px;
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcff;
+      box-shadow: 0 5px 0 #e2e7ef;
+    }
+    .row.many { grid-template-columns: 30px 1.1fr 1.1fr .75fr 38px; }
+    .row.equip { grid-template-columns: 30px 1fr 1fr 1.15fr .7fr 38px; }
+    .num {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 26px;
+    }
+    .delete {
+      width: 34px;
+      height: 34px;
+      margin-top: 25px;
+      border: 0;
+      border-radius: 11px;
+      background: #ffe9e6;
+      color: var(--red-dark);
+      font-weight: 900;
+    }
+
+    .uploader {
+      display: grid;
+      place-items: center;
+      gap: 10px;
+      padding: 18px;
+      border: 1px dashed #aab3c1;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff, #f6f8fb);
+      text-align: center;
+    }
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .photo {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 7px 0 #e1e6ee;
+    }
+    .photo img { width: 100%; height: 122px; object-fit: cover; display: block; }
+    .photo input { border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: 12px; }
+    .photo button {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      width: 29px;
+      height: 29px;
+      border: 0;
+      border-radius: 10px;
+      background: rgba(0,0,0,.62);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .sticky-actions {
+      position: sticky;
+      top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .summary-card {
+      background: linear-gradient(160deg, #fff, #f7f9fd);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 14px 0 #d9e0eb, var(--shadow);
+    }
+    .summary-logo {
+      width: 150px;
+      height: 96px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 10px;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.14));
+    }
+    .summary-card h3 { margin: 0 0 8px; text-align: center; font-size: 20px; }
+    .summary-card p { margin: 0; color: var(--muted); text-align: center; font-size: 13px; }
+
+    #preview {
+      display: none;
+      direction: ltr;
+      max-width: 900px;
+      margin: 22px auto 0;
+      padding: 28px;
+      background: #fff;
+      color: #000;
+      border: 1px solid #c7c7c7;
+      box-shadow: var(--shadow);
+    }
+    #preview.show { display: block; }
+    .report { font-family: Arial, sans-serif; font-size: 11px; }
+    .r-head {
+      display: grid;
+      grid-template-columns: 120px 1fr 160px;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #111;
+      margin-bottom: 8px;
+    }
+    .r-logo {
+      width: 106px;
+      height: 66px;
+      object-fit: contain;
+      display: block;
+    }
+    .r-title { text-align: center; }
+    .r-title h2 { margin: 0; font-size: 20px; }
+    .r-title p { margin: 3px 0 0; font-weight: 700; color: #333; }
+    .r-meta { text-align: right; line-height: 1.7; font-size: 10.5px; }
+    .meta-line {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      border: 1px solid #111;
+      margin-bottom: 8px;
+    }
+    .meta-line div { padding: 5px 7px; border-right: 1px solid #111; font-weight: 700; }
+    .meta-line div:last-child { border-right: 0; }
+    .sect { background: #ececec; border: 1px solid #111; border-bottom: 0; padding: 4px 7px; font-weight: 900; }
+    .twocol { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #111; margin-bottom: 8px; }
+    .twocol > div:first-child { border-right: 1px solid #111; }
+    .col-title { background: #f7f7f7; border-bottom: 1px solid #111; padding: 4px 7px; font-weight: 900; }
+    .line { display: grid; grid-template-columns: 28px 1fr; border-bottom: 1px solid #ccc; min-height: 25px; }
+    .line:last-child { border-bottom: 0; }
+    .line b { display: grid; place-items: center; border-right: 1px solid #ccc; }
+    .line span { padding: 5px 7px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    th, td { border: 1px solid #111; padding: 5px 6px; vertical-align: top; }
+    th { background: #f2f2f2; text-align: left; }
+    .center { text-align: center; }
+    .r-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+    .r-photo { position: relative; border: 1px solid #111; min-height: 190px; }
+    .r-photo img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .caption { position: absolute; left: 8px; right: 8px; bottom: 8px; background: rgba(255,255,255,.9); padding: 5px; text-align: center; font-weight: 900; }
+    .sign { border: 1px solid #111; margin-top: 10px; }
+    .sign .sign-row { display: grid; grid-template-columns: 110px 1fr; border-bottom: 1px solid #111; }
+    .sign .sign-row:last-child { border-bottom: 0; }
+    .sign b { padding: 6px; background: #f2f2f2; border-right: 1px solid #111; }
+    .sign span { padding: 6px; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s;
+      z-index: 40;
+    }
+    .toast.show { opacity: 1; bottom: 30px; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .sticky-actions { position: static; }
+      .quick-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 680px) {
+      .shell { width: min(100% - 20px, 1180px); padding-top: 10px; }
+      .hero { border-radius: 18px; padding: 16px; box-shadow: 0 10px 0 #cfd7e4, var(--shadow); }
+      .brand { align-items: flex-start; }
+      .brand-logo { width: 78px; height: 56px; }
+      .hero-actions, .hero-actions .btn { width: 100%; }
+      .quick-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .g2, .g3, .row.many, .row.equip, .row { grid-template-columns: 1fr; }
+      .num, .delete { margin-top: 0; }
+      .panel { padding: 15px; border-radius: 16px; }
+      #preview { padding: 14px; overflow-x: auto; }
+      .r-head { grid-template-columns: 90px 1fr; }
+      .r-meta { grid-column: 1 / -1; text-align: left; }
+      .meta-line, .twocol { grid-template-columns: 1fr; }
+      .meta-line div, .twocol > div:first-child { border-right: 0; border-bottom: 1px solid #111; }
+    }
+    @media print {
+      body { background: #fff; }
+      .shell, .toast { display: none !important; }
+      #preview { display: block !important; box-shadow: none; border: 0; padding: 0; margin: 0; max-width: none; }
+      .report { font-size: 10.5px; }
+      .r-logo { width: 96px; height: 58px; }
+      @page { size: A4; margin: 11mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <img class="brand-logo" src="tz-logo-print.png" alt="TZ Company logo">
+          <div>
+            <h1>تقرير العمل اليومي</h1>
+            <p>إدخال سريع ومنظم مع معاينة وطباعة مباشرة</p>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn light" type="button" onclick="loadYesterday()">ابدأ من آخر تقرير</button>
+          <button class="btn light" type="button" onclick="newReport()">تقرير جديد</button>
+          <button class="btn primary" type="button" onclick="buildPreview(false)">معاينة</button>
+          <button class="btn dark" type="button" onclick="buildPreview(true)">طباعة</button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="quick-nav" aria-label="أقسام التقرير">
+      <a href="#project"><span>01</span>المشروع</a>
+      <a href="#activities"><span>02</span>الأعمال</a>
+      <a href="#resources"><span>03</span>الكادر</a>
+      <a href="#equipment"><span>04</span>المعدات</a>
+      <a href="#notes"><span>05</span>الملاحظات</a>
+      <a href="#pictures"><span>06</span>الصور</a>
+    </nav>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="panel" id="project">
+          <h2>بيانات المشروع</h2>
+          <p class="hint">المعلومات الأساسية التي تظهر أعلى التقرير النهائي.</p>
+          <div class="grid g3">
+            <div><label>عنوان المشروع</label><input id="projectTitle" value="SAS Satellite Al Amanah"></div>
+            <div><label>رقم التقرير</label><input id="reportNo" value="DRPRT-AMANH-138"></div>
+            <div><label>التاريخ</label><input id="reportDate" type="date"></div>
+            <div><label>الطقس</label><input id="weather" value="Sunny"></div>
+            <div><label>درجة الحرارة</label><input id="temperature" value="48 C"></div>
+            <div><label>الشركة / الموقع</label><input id="siteName" value="TZ Company"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="activities">
+          <h2>الأعمال المنجزة وخطة 48 ساعة</h2>
+          <p class="hint">اختصر الوقت من العبارات الجاهزة، وبعدها عدّل النص حسب واقع الموقع.</p>
+          <div class="grid g2">
+            <div>
+              <label>الأعمال المنجزة اليوم</label>
+              <div class="chips" id="doneChips"></div>
+              <div class="rows" id="doneRows"></div>
+              <button class="btn full" type="button" onclick="addTextRow('doneRows')">إضافة عمل منجز</button>
+            </div>
+            <div>
+              <label>الأعمال المخططة خلال 48 ساعة</label>
+              <div class="chips" id="planChips"></div>
+              <div class="rows" id="planRows"></div>
+              <button class="btn full" type="button" onclick="addTextRow('planRows')">إضافة عمل مخطط</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="resources">
+          <h2>الكادر العامل</h2>
+          <p class="hint">أضف كل صنف من الكادر مع الشركة والعدد.</p>
+          <div class="rows" id="manRows"></div>
+          <button class="btn full" type="button" onclick="addManpower()">إضافة كادر</button>
+        </section>
+
+        <section class="panel" id="equipment">
+          <h2>المعدات والمكائن</h2>
+          <p class="hint">اكتب نوع المعدة والعمل وعدد ساعات التشغيل.</p>
+          <div class="rows" id="equipRows"></div>
+          <button class="btn full" type="button" onclick="addEquipment()">إضافة معدة</button>
+        </section>
+
+        <section class="panel" id="notes">
+          <h2>المشاكل والملاحظات</h2>
+          <div class="grid g2">
+            <div>
+              <label>المشاكل</label>
+              <div class="rows" id="problemRows"></div>
+              <button class="btn full" type="button" onclick="addTextRow('problemRows')">إضافة مشكلة</button>
+            </div>
+            <div>
+              <label>الملاحظات العامة</label>
+              <div class="rows" id="commentRows"></div>
+              <button class="btn full" type="button" onclick="addComment()">إضافة ملاحظة</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="pictures">
+          <h2>صور الموقع</h2>
+          <p class="hint">ارفع الصور واكتب وصف مختصر. الصور تظهر في التقرير النهائي قبل التوقيع.</p>
+          <div class="uploader">
+            <strong>رفع صور التقرير النهائي</strong>
+            <input id="photoInput" type="file" accept="image/*" multiple onchange="addPhotos(event)">
+          </div>
+          <div class="photos" id="photoGrid"></div>
+        </section>
+      </div>
+
+      <aside class="sticky-actions">
+        <div class="summary-card">
+          <img class="summary-logo" src="tz-logo-print.png" alt="TZ Company logo">
+          <h3>تقرير العمل اليومي</h3>
+          <p>املأ البيانات، راجع النتيجة، ثم اطبع التقرير النهائي.</p>
+        </div>
+        <section class="panel" id="sign">
+          <h2>التوقيع</h2>
+          <div class="grid">
+            <div><label>اسم معد التقرير</label><input id="reportedBy" value="Site Engineer"></div>
+            <div><label>الصفة الوظيفية</label><input id="reportedTitle" value="Site Engineer"></div>
+          </div>
+          <div class="grid" style="margin-top:12px">
+            <button class="btn primary" type="button" onclick="buildPreview(false)">معاينة التقرير</button>
+            <button class="btn dark" type="button" onclick="buildPreview(true)">طباعة النتيجة النهائية</button>
+            <button class="btn" type="button" onclick="saveCurrent()">حفظ كآخر تقرير</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div id="preview"></div>
+  <div class="toast" id="toast">تم الحفظ</div>
+
+  <script>
+    const samples = [
+      { ar: 'المباشرة بأعمال الطبقة النهائية للمحارة حسب المواصفات المعتمدة ومتطلبات المشروع.', en: 'Commencement of the final coat plastering works in accordance with the approved specifications and project requirements.' },
+      { ar: 'استمرار تحويل المساحة أسفل الدرج إلى غرفة حارس ودورة مياه.', en: 'Continuation of the conversion of the space beneath the stair landing into a guard room and toilet.' },
+      { ar: 'استمرار أعمال منظومة مكافحة الحريق حسب المخططات المعتمدة.', en: 'Continuation of fire fighting system works in accordance with the approved drawings.' },
+      { ar: 'استمرار تركيب دكتات التكييف المعزولة بالفوم.', en: 'Continuation of ductwork installation including foam-insulated ducts.' },
+      { ar: 'متابعة أعمال التكييف والتنسيق من حيث المناسيب والمسارات ونقاط التثبيت.', en: 'Proceed with HVAC installation and coordination works including levels, routing, and fixing locations.' },
+      { ar: 'تنظيف الموقع والتنسيق وتجهيز واجهة العمل التالية.', en: 'Site cleaning, coordination, and preparation for the next work front.' }
+    ];
+    const roles = [
+      { ar: 'مهندس', en: 'Engineer' },
+      { ar: 'مدير مشروع', en: 'Project Manager' },
+      { ar: 'مهندس موقع', en: 'Site Engineer' },
+      { ar: 'مهندس كهرباء', en: 'Electrical Engineer' },
+      { ar: 'فورمن', en: 'Foreman' },
+      { ar: 'عامل', en: 'Worker' },
+      { ar: 'فورمن محارة', en: 'Plastering Foreman' },
+      { ar: 'عامل محارة', en: 'Plastering Worker' },
+      { ar: 'فني تركيب', en: 'Installation Technician' }
+    ];
+    const companies = [
+      { ar: 'شركة TZ', en: 'TZ Company' },
+      { ar: 'مجموعة SAS', en: 'SAS group' },
+      { ar: 'مجموعة كوفان', en: 'Kufan group' }
+    ];
+    const equipmentLibrary = [
+      { make: 'Various make', type: 'Hand Tools', work: 'General installation activities', hours: 8 },
+      { make: 'DeWalt', type: 'Circular saw', work: 'Cutting works', hours: 8 },
+      { make: 'DeWalt', type: 'Laser level', work: 'Setting out levels', hours: 4 },
+      { make: 'Ingco', type: 'Hammer drill', work: 'Demolition works', hours: 6 }
+    ];
+    let photos = [];
+
+    const $ = id => document.getElementById(id);
+    const esc = value => String(value || '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const today = () => new Date().toISOString().slice(0, 10);
+    const rowsOf = id => [...$(id).querySelectorAll('.row')];
+
+    function toast(text) {
+      $('toast').textContent = text;
+      $('toast').classList.add('show');
+      setTimeout(() => $('toast').classList.remove('show'), 1600);
+    }
+
+    function renumber(id) {
+      rowsOf(id).forEach((row, index) => row.querySelector('.num').textContent = index + 1);
+    }
+
+    function addTextRow(containerId, value = '') {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<div class="num"></div><div><textarea>${esc(value)}</textarea></div><button class="delete" type="button" onclick="this.closest('.row').remove(); renumber('${containerId}')">×</button>`;
+      $(containerId).appendChild(row);
+      renumber(containerId);
+    }
+
+    const phraseMap = {
+      ...Object.fromEntries(samples.map(item => [item.ar, item.en])),
+      'المباشرة بتركيب أنابيب منظومة مكافحة الحريق حسب المخططات والمواصفات المعتمدة.': 'Commencement of the installation of fire fighting pipes in accordance with the approved drawings and project specifications.',
+      'استمرار تركيب الدكتات وأعمال التنسيق الخاصة بالتكييف.': 'Continuation of ductwork installation and HVAC coordination works.'
+    };
+
+    function addChips() {
+      ['doneChips', 'planChips'].forEach(chipBox => {
+        const target = chipBox === 'doneChips' ? 'doneRows' : 'planRows';
+        $(chipBox).innerHTML = samples.map(item => `<button class="chip" type="button" onclick="addTextRow('${target}', '${esc(item.ar)}')">${esc(item.ar.slice(0, 38))}...</button>`).join('');
+      });
+    }
+
+    function selectOptions(items, selected) {
+      return items.map(item => `<option value="${esc(item.en)}" ${item.en === selected ? 'selected' : ''}>${esc(item.ar)}</option>`).join('');
+    }
+
+    function addManpower(data = {}) {
+      const row = document.createElement('div');
+      row.className = 'row many';
+      row.innerHTML = `
+        <div class="num"></div>
+        <div><label>الصنف</label><select>${selectOptions(roles, data.role)}</select></div>
+        <div><label>الشركة</label><select>${selectOptions(companies, data.company)}</select></div>
+        <div><label>العدد</label><input type="number" min="1" value="${esc(data.num || 1)}"></div>
+        <button class="delete" type="button" onclick="this.closest('.row').remove(); renumber('manRows')">×</button>`;
+      $('manRows').appendChild(row);
+      renumber('manRows');
+    }
+
+    function addEquipment(data = {}) {
+      const row = document.createElement('div');
+      row.className = 'row equip';
+      row.innerHTML = `
+        <div class="num"></div>
+        <div><label>الشركة المصنّعة</label><input value="${esc(data.make || '')}"></div>
+        <div><label>نوع المعدة</label><input value="${esc(data.type || '')}"></div>
+        <div><label>نوع العمل</label><input value="${esc(data.work || '')}"></div>
+        <div><label>الساعات</label><input type="number" min="0" value="${esc(data.hours || 8)}"></div>
+        <button class="delete" type="button" onclick="this.closest('.row').remove(); renumber('equipRows')">×</button>`;
+      $('equipRows').appendChild(row);
+      renumber('equipRows');
+    }
+
+    function addComment(data = {}) {
+      const row = document.createElement('div');
+      row.className = 'row many';
+      row.innerHTML = `
+        <div class="num"></div>
+        <div style="grid-column: span 2"><label>الملاحظة</label><textarea>${esc(data.text || '')}</textarea></div>
+        <div><label>بواسطة</label><input value="${esc(data.by || '')}"></div>
+        <button class="delete" type="button" onclick="this.closest('.row').remove(); renumber('commentRows')">×</button>`;
+      $('commentRows').appendChild(row);
+      renumber('commentRows');
+    }
+
+    function addPhotos(event) {
+      [...event.target.files].forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          photos.push({ data: e.target.result, caption: '' });
+          renderPhotos();
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function renderPhotos() {
+      $('photoGrid').innerHTML = photos.map((photo, index) => `
+        <div class="photo">
+          <button type="button" onclick="photos.splice(${index}, 1); renderPhotos()">×</button>
+          <img src="${photo.data}" alt="">
+          <input placeholder="وصف الصورة" value="${esc(photo.caption)}" oninput="photos[${index}].caption = this.value">
+        </div>`).join('');
+    }
+
+    function collect() {
+      const textRows = id => rowsOf(id).map(row => row.querySelector('textarea').value.trim()).filter(Boolean);
+      const manpower = rowsOf('manRows').map(row => {
+        const selects = row.querySelectorAll('select');
+        return { role: selects[0].value, company: selects[1].value, num: row.querySelector('input').value };
+      }).filter(item => item.role);
+      const equipment = rowsOf('equipRows').map(row => {
+        const inputs = row.querySelectorAll('input');
+        return { make: inputs[0].value.trim(), type: inputs[1].value.trim(), work: inputs[2].value.trim(), hours: inputs[3].value.trim() };
+      }).filter(item => item.make || item.type || item.work);
+      const comments = rowsOf('commentRows').map(row => ({
+        text: row.querySelector('textarea').value.trim(),
+        by: row.querySelector('input').value.trim()
+      })).filter(item => item.text);
+      return {
+        projectTitle: $('projectTitle').value.trim(),
+        reportNo: $('reportNo').value.trim(),
+        reportDate: $('reportDate').value,
+        weather: $('weather').value.trim(),
+        temperature: $('temperature').value.trim(),
+        siteName: $('siteName').value.trim(),
+        done: textRows('doneRows'),
+        plan: textRows('planRows'),
+        problems: textRows('problemRows'),
+        manpower,
+        equipment,
+        comments,
+        photos: photos.slice(),
+        reportedBy: $('reportedBy').value.trim(),
+        reportedTitle: $('reportedTitle').value.trim()
+      };
+    }
+
+    function restore(data) {
+      ['projectTitle', 'reportNo', 'reportDate', 'weather', 'temperature', 'siteName', 'reportedBy', 'reportedTitle'].forEach(id => {
+        if (data[id] !== undefined) $(id).value = data[id];
+      });
+      ['doneRows', 'planRows', 'problemRows', 'manRows', 'equipRows', 'commentRows'].forEach(id => $(id).innerHTML = '');
+      (data.done || ['']).forEach(text => addTextRow('doneRows', text));
+      (data.plan || ['']).forEach(text => addTextRow('planRows', text));
+      (data.problems || []).forEach(text => addTextRow('problemRows', text));
+      (data.manpower || []).forEach(addManpower);
+      (data.equipment || []).forEach(addEquipment);
+      (data.comments || []).forEach(addComment);
+      photos = (data.photos || []).slice();
+      renderPhotos();
+    }
+
+    function saveCurrent() {
+      localStorage.setItem('tz_daily_work_report', JSON.stringify(collect()));
+      toast('انحفظ كآخر تقرير');
+    }
+
+    function loadYesterday() {
+      const saved = localStorage.getItem('tz_daily_work_report');
+      if (!saved) {
+        toast('ماكو تقرير محفوظ بعد');
+        return;
+      }
+      const data = JSON.parse(saved);
+      data.reportDate = today();
+      data.photos = [];
+      restore(data);
+      toast('تم تحميل آخر تقرير');
+    }
+
+    function newReport() {
+      restore(defaultData());
+      toast('تقرير جديد جاهز');
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso + 'T00:00:00');
+      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+    }
+
+    function lines(items) {
+      const list = items.length ? items : [''];
+      return list.map((item, index) => `<div class="line"><b>${index + 1}</b><span>${esc(phraseMap[item] || item) || '&nbsp;'}</span></div>`).join('');
+    }
+
+    function tableRows(items, cells) {
+      const list = items.length ? items : [null];
+      return list.map((item, index) => `<tr><td class="center">${index + 1}</td>${cells(item)}</tr>`).join('');
+    }
+
+    function buildPreview(printAfter) {
+      const data = collect();
+      saveCurrent();
+      const manpowerRows = tableRows(data.manpower, item => item
+        ? `<td>${esc(item.role)}</td><td>${esc(item.company)}</td><td class="center">${esc(item.num)}</td>`
+        : '<td>&nbsp;</td><td></td><td></td>');
+      const equipmentRows = tableRows(data.equipment, item => item
+        ? `<td>${esc(item.make)}</td><td>${esc(item.type)}</td><td>${esc(item.work)}</td><td class="center">${esc(item.hours)}</td>`
+        : '<td>&nbsp;</td><td></td><td></td><td></td>');
+      const problemRows = tableRows(data.problems, item => `<td>${esc(item || '') || '&nbsp;'}</td>`);
+      const commentRows = tableRows(data.comments, item => item
+        ? `<td>${esc(item.text)}</td><td>${esc(item.by)}</td><td>${fmtDate(data.reportDate)}</td>`
+        : '<td>&nbsp;</td><td></td><td></td>');
+      const photoBlock = data.photos.length ? `
+        <div class="sect">G. Pictures</div>
+        <div class="r-photos">${data.photos.map(photo => `<div class="r-photo"><img src="${photo.data}" alt="">${photo.caption ? `<div class="caption">${esc(photo.caption)}</div>` : ''}</div>`).join('')}</div>` : '';
+
+      $('preview').innerHTML = `
+        <div class="report">
+          <div class="r-head">
+            <img class="r-logo" src="tz-logo-print.png" alt="TZ Company logo">
+            <div class="r-title"><h2>Daily Work Progress Report</h2><p>Work progress summary</p></div>
+            <div class="r-meta"><b>No:</b> ${esc(data.reportNo)}<br><b>Date:</b> ${fmtDate(data.reportDate)}<br><b>Prepared By:</b> ${esc(data.reportedBy)}</div>
+          </div>
+          <div class="meta-line">
+            <div>Project Title: ${esc(data.projectTitle)}</div>
+            <div>Weather: ${esc(data.weather)}</div>
+            <div>Temperature: ${esc(data.temperature)}</div>
+          </div>
+          <div class="meta-line">
+            <div>Company / Site: ${esc(data.siteName)}</div>
+            <div>Date: ${fmtDate(data.reportDate)}</div>
+            <div>Title: ${esc(data.reportedTitle)}</div>
+          </div>
+          <div class="sect">A. Activities</div>
+          <div class="twocol">
+            <div><div class="col-title">Activities done today</div>${lines(data.done)}</div>
+            <div><div class="col-title">Planned for the next 48 hours</div>${lines(data.plan)}</div>
+          </div>
+          <div class="sect">B. Manpower</div>
+          <table><tr><th class="center">#</th><th>Classification</th><th>Company</th><th class="center">No. of Persons</th></tr>${manpowerRows}</table>
+          <div class="sect">C. Equipment & Machinery</div>
+          <table><tr><th class="center">#</th><th>Machine Make</th><th>Machine Type</th><th>Type of Work</th><th class="center">Hours</th></tr>${equipmentRows}</table>
+          <div class="sect">D. Problems</div>
+          <table><tr><th class="center">#</th><th>Description</th></tr>${problemRows}</table>
+          <div class="sect">F. General Comments</div>
+          <table><tr><th class="center">#</th><th>Comment</th><th>By</th><th>Date</th></tr>${commentRows}</table>
+          ${photoBlock}
+          <div class="sign">
+            <div class="sign-row"><b>Reported By</b><span>${esc(data.reportedBy)}</span></div>
+            <div class="sign-row"><b>Title</b><span>${esc(data.reportedTitle)}</span></div>
+            <div class="sign-row"><b>Date</b><span>${fmtDate(data.reportDate)}</span></div>
+          </div>
+        </div>`;
+      $('preview').classList.add('show');
+      $('preview').scrollIntoView({ behavior: 'smooth' });
+      if (printAfter) setTimeout(() => window.print(), 250);
+    }
+
+    function defaultData() {
+      return {
+        projectTitle: 'SAS Satellite Al Amanah',
+        reportNo: 'DRPRT-AMANH-138',
+        reportDate: today(),
+        weather: 'Sunny',
+        temperature: '48 C',
+        siteName: 'TZ Company',
+        done: [
+          'المباشرة بأعمال الطبقة النهائية للمحارة حسب المواصفات المعتمدة ومتطلبات المشروع.',
+          'المباشرة بتركيب أنابيب منظومة مكافحة الحريق حسب المخططات والمواصفات المعتمدة.'
+        ],
+        plan: [
+          'استمرار تحويل المساحة أسفل الدرج إلى غرفة حارس ودورة مياه.',
+          'استمرار تركيب الدكتات وأعمال التنسيق الخاصة بالتكييف.'
+        ],
+        problems: [],
+        manpower: [
+          { role: 'Engineer', company: 'TZ Company', num: 2 },
+          { role: 'Project Manager', company: 'Kufan group', num: 1 },
+          { role: 'Site Engineer', company: 'Kufan group', num: 1 },
+          { role: 'Worker', company: 'Kufan group', num: 3 },
+          { role: 'Installation Technician', company: 'Kufan group', num: 3 }
+        ],
+        equipment: equipmentLibrary,
+        comments: [],
+        photos: [],
+        reportedBy: 'Site Engineer',
+        reportedTitle: 'Site Engineer'
+      };
+    }
+
+    addChips();
+    newReport();
+  </script>
+</body>
+</html>
