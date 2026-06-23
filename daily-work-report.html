@@ -343,7 +343,7 @@
     .report { font-family: Arial, sans-serif; font-size: 11px; }
     .r-head {
       display: grid;
-      grid-template-columns: 120px 1fr 160px;
+      grid-template-columns: 150px 1fr 150px;
       gap: 12px;
       align-items: center;
       padding-bottom: 8px;
@@ -351,11 +351,13 @@
       margin-bottom: 8px;
     }
     .r-logo {
-      width: 106px;
-      height: 66px;
+      width: 100%;
+      height: 76px;
       object-fit: contain;
       display: block;
     }
+    .r-logo-left { object-position: left center; }
+    .r-logo-right { object-position: right center; }
     .r-title { text-align: center; }
     .r-title h2 { margin: 0; font-size: 20px; }
     .r-title p { margin: 3px 0 0; font-weight: 700; color: #333; }
@@ -437,7 +439,7 @@
       .num, .delete { margin-top: 0; }
       .panel { padding: 15px; border-radius: 16px; }
       #preview { padding: 14px; overflow-x: auto; }
-      .r-head { grid-template-columns: 90px 1fr; }
+      .r-head { grid-template-columns: 90px 1fr 90px; }
       .r-meta { grid-column: 1 / -1; text-align: left; }
       .meta-line, .twocol { grid-template-columns: 1fr; }
       .meta-line div, .twocol > div:first-child { border-right: 0; border-bottom: 1px solid #111; }
@@ -447,7 +449,7 @@
       .shell, .toast { display: none !important; }
       #preview { display: block !important; box-shadow: none; border: 0; padding: 0; margin: 0; max-width: none; }
       .report { font-size: 10.5px; }
-      .r-logo { width: 96px; height: 58px; }
+      .r-logo { width: 100%; height: 70px; }
       @page { size: A4; margin: 11mm; }
     }
   </style>
@@ -604,6 +606,7 @@
     const companies = [
       { ar: 'شركة TZ', en: 'TZ Company' },
       { ar: 'مجموعة SAS', en: 'SAS group' },
+      { ar: 'شركة إبداع القلم', en: 'Ibdaa Al-Qalam Company' },
       { ar: 'مجموعة كوفان', en: 'Kufan group' }
     ];
     const equipmentLibrary = [
@@ -832,10 +835,11 @@
       $('preview').innerHTML = `
         <div class="report">
           <div class="r-head">
-            <img class="r-logo" src="tz-logo-print.png" alt="TZ Company logo">
+            <img class="r-logo r-logo-left" src="sas-logo.jpg" alt="SAS logo">
             <div class="r-title"><h2>Daily Work Progress Report</h2><p>Work progress summary</p></div>
-            <div class="r-meta"><b>No:</b> ${esc(data.reportNo)}<br><b>Date:</b> ${fmtDate(data.reportDate)}<br><b>Prepared By:</b> ${esc(data.reportedBy)}</div>
+            <img class="r-logo r-logo-right" src="ibdaa-alqalam-logo.jpg" alt="Ibdaa Al-Qalam Company logo">
           </div>
+          <div class="r-meta"><b>No:</b> ${esc(data.reportNo)} &nbsp; | &nbsp; <b>Date:</b> ${fmtDate(data.reportDate)} &nbsp; | &nbsp; <b>Prepared By:</b> ${esc(data.reportedBy)}</div>
           <div class="meta-line">
             <div>Project Title: ${esc(data.projectTitle)}</div>
             <div>Weather: ${esc(data.weather)}</div>
